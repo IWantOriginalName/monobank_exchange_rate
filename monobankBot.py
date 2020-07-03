@@ -1,50 +1,41 @@
-URL = "https://api.telegram.org/bot1143654408:AAGnSxyTcJD062wn1jYT8DhVaFqCLR4IRPYs/" % BOT_TOKEN
-MyURL = "https://example.com/hook"
+from telegram import Bot
+from telegram import Update
+from telegram.ext import Updater
+from telegram.ext import MessageHandler
+from telegram.ext import Filters
 
-api = requests.Session()
-application = tornado.web.Application([
-    (r"/", Handler),
-])
+TG_TOKEN = "1143654408:AAGnSxyTcJD062wn1jYT8DhVaFqCLR4IRPY"
 
+def message_handler(bot: Bot, update: Update):
+    user = update.effective_user
+    if user:
+        name = user.first_name
+    else:
+        name = 'аноним'
+        
+    text = update.effective_message.text
+    reply_text = f'Привет, {name}!\n\n{text}'
+    
+    bot.send_message(
+        chat_id = update.effective_message.chat_id,
+        text = reply_text,
+    )
+
+def main():
+    print('Start')
+    bot = Bot(
+        token=TG_TOKEN,
+    )
+    updater = Updater(
+        bot=bot,
+    )
+    
+    handler = MessageHandler(Filters.all, message_handler)
+    updater.dispatcher.add_handler(handler)
+    
+    updater.start_polling()
+    updater.idle()
+    print('Finish')
+    
 if __name__ == '__main__':
-    signal.signal(signal.SIGTERM, signal_term_handler)
-    try:
-        set_hook = api.get(URL + "setWebhook?url=%s" % MyURL)
-        if set_hook.status_code != 200:
-            logging.error("Can't set hook: %s. Quit." % set_hook.text)
-            exit(1)
-        application.listen(8888)
-        tornado.ioloop.IOLoop.current().start()
-    except KeyboardInterrupt:
-        signal_term_handler(signal.SIGTERM, None)
-        
-class Handler(tornado.web.RequestHandler):
-        def post(self):
-            try:
-                logging.debug("Got request: %s" % self.request.body)
-                update = tornado.escape.json_decode(self.request.body)
-                message = update['message']
-                text = message.get('text')
-                if text:
-                    logging.info("MESSAGE\t%s\t%s" % (message['chat']['id'], text))
-
-                    if text[0] == '/':
-                        command, *arguments = text.split(" ", 1)
-                        response = CMD.get(command, not_found)(arguments, message)
-                        logging.info("REPLY\t%s\t%s" % (message['chat']['id'], response))
-                        send_reply(response)
-            except Exception as e:
-                logging.warning(str(e))
-                
-                def send_reply(response):
-    if 'text' in response:
-        api.post(URL + "sendMessage", data=response)
-        
-        def help_message(arguments, message):
-    response = {'chat_id': message['chat']['id']}
-    result = ["Hey, %s!" % message["from"].get("first_name"),
-              "\rI can accept only these commands:"]
-    for command in CMD:
-        result.append(command)
-    response['text'] = "\n\t".join(result)
-    return response
+    main()
