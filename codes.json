@@ -563,6 +563,12 @@
   "currency": "Tugrik",
   "countries": ["Mongolia"]
 }, {
+  "code": "MRO",
+  "number": "478",
+  "digits": 2,
+  "currency": "Ouguiya",
+  "countries": ["Mauritania"]
+}, {
   "code": "MOP",
   "number": "446",
   "digits": 2,
