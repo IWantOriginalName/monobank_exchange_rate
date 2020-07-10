@@ -1067,8 +1067,8 @@
   "currency": "Rand",
   "countries": ["Lesotho", "Namibia", "South Africa"]
 }, {
-  "code": "ZMW",
-  "number": "967",
+  "code": "ZMK",
+  "number": "894",
   "digits": 2,
   "currency": "Zambian Kwacha",
   "countries": ["Zambia"]
