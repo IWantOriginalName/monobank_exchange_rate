@@ -9,5 +9,5 @@ opencv-python==4.2.0.32
 requests==2.24.0
 scipy==1.4.1
 six==1.15.0
-urllib3==1.25.9
+urllib3==1.26.5
 virtualenv==20.0.25
